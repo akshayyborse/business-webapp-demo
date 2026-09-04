@@ -5853,14 +5853,15 @@ window.BO.OM_NAME = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAAoCAYAA
       function recentTable(items, cols, kind) {
         if (!items.length) return NS.empty('\ud83d\uddd2\ufe0f', 'Nothing here yet', 'Create your first ' + kind + ' to see it appear.', '');
         var head = cols.map(function (c) { return '<th class="' + (c.align || '') + '">' + c.l + '</th>'; }).join('');
-        return '<div class="tbl-wrap"><table class="tbl"><thead><tr>' + head + '</tr></thead><tbody>' + items + '</tbody></table></div>';
+        var cls = 'tbl' + (kind === 'quotation' ? ' qlist' : kind === 'order' ? ' olist' : '');
+        return '<div class="tbl-wrap"><table class="' + cls + '"><thead><tr>' + head + '</tr></thead><tbody>' + items + '</tbody></table></div>';
       }
       function quoteRows(n) {
         var s = st();
         return s.quotations.slice().sort(function (a, b) { return b.date < a.date ? -1 : 1; }).slice(0, n).map(function (q) {
           var c = NS.findCust(s, q.customerId) || {};
           var meta = NS.QUOTE_ST[q.status] || NS.QUOTE_ST.draft;
-          return '<tr class="clickable" data-act="qt-view" data-id="' + q.id + '"><td class="num bold" style="color:var(--primary-2)">' + q.id + '</td><td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', (c.avatarHue || 140)) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.name || 'Walk-in') + '</b><small>' + NS.esc((c.company || '')) + '</small></span></div></td><td class="num bold">' + NS.money(NS.liveTot(q).total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small"><span>' + NS.fmtD(q.date) + '</span>' + (NS.timeOf(q.date) ? '<span class="d-time">' + NS.timeOf(q.date) + '</span>' : '') + '</td></tr>';
+          return '<tr class="clickable" data-act="qt-view" data-id="' + q.id + '"><td class="num bold" style="color:var(--primary-2)">' + q.id + '</td><td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', (c.avatarHue || 140)) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.name || 'Walk-in') + '</b><small>' + NS.esc((c.company || '')) + '</small></span></div></td><td class="num bold" data-l="Amount">' + NS.money(NS.liveTot(q).total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small" data-l="Date"><span>' + NS.fmtD(q.date) + '</span>' + (NS.timeOf(q.date) ? '<span class="d-time">' + NS.timeOf(q.date) + '</span>' : '') + '</td></tr>';
         }).join('');
       }
       function orderRows(n) {
@@ -5868,7 +5869,11 @@ window.BO.OM_NAME = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAAoCAYAA
         return s.orders.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, n).map(function (o) {
           var c = NS.findCust(s, o.customerId) || {};
           var meta = NS.ORDER_ST[o.status] || NS.ORDER_ST.pending;
-          return '<tr class="clickable" data-act="ord-view" data-id="' + o.id + '"><td class="num bold" style="color:var(--primary-2)">' + o.id + '</td><td><b style="font-size:12.8px">' + NS.esc(c.company || c.name) + '</b></td><td class="num bold">' + NS.money(o.total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small"><span>' + NS.fmtD(o.date) + '</span>' + (NS.timeOf(o.date) ? '<span class="d-time">' + NS.timeOf(o.date) + '</span>' : '') + '</td></tr>';
+          return '<tr class="clickable" data-act="ord-view" data-id="' + o.id + '"><td class="num bold" style="color:var(--primary-2)">' + o.id + '</td>' +
+            '<td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', c.avatarHue || 140) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.company || c.name || '—') + '</b><small>' + NS.esc(c.name || '') + '</small></span></div></td>' +
+            '<td class="num bold" data-l="Amount">' + NS.money(o.total) + '</td>' +
+            '<td>' + NS.badge(meta.t, meta.l, true) + '</td>' +
+            '<td class="muted small" data-l="Date"><span>' + NS.fmtD(o.date) + '</span>' + (NS.timeOf(o.date) ? '<span class="d-time">' + NS.timeOf(o.date) + '</span>' : '') + '</td></tr>';
         }).join('');
       }
       function lowStockHtml(n) {
