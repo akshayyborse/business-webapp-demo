@@ -735,6 +735,98 @@ input[type=range]{accent-color:var(--primary);height:4px;width:100%;cursor:point
   .modal-layer{padding:6px}
   .btn{padding:0 11px}
 }
+
+/* ============ quotation maker — proper mobile view ============
+   Desktop/tablet: lines stay a real table. Phones: each line becomes a
+   stacked card (product on top, Qty/Price/Disc/Tax fields below, line
+   total pinned) so nothing needs sideways scrolling to edit. The totals
+   summary + action buttons (Save Draft / Preview / Send) live in the
+   modal footer, always visible above the bottom nav / home indicator. */
+.qmf{display:flex;flex-direction:column;gap:12px;width:100%}
+.qmf-tots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%}
+.qt-item{display:flex;flex-direction:column;gap:1px;padding:8px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;min-width:0}
+.qt-item span{font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qt-item b{font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qt-item.qt-grand{background:var(--primary-soft);border-color:var(--primary)}
+.qt-item.qt-grand b{color:var(--primary-2);font-size:17px}
+.qmf-acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+@media (max-width:700px){
+  .quote-lines{min-width:0}
+  .quote-lines thead{display:none}
+  .quote-lines tbody tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 10px;position:relative;padding:12px;margin:0 0 10px;background:var(--surface-2);border:1px solid var(--border-2);border-radius:14px}
+  .quote-lines tbody tr:last-child{margin-bottom:0}
+  .quote-lines tbody tr>td{border:none;padding:0;vertical-align:middle}
+  .quote-lines tbody tr>td:nth-child(1){display:none}
+  .quote-lines tbody tr>td:nth-child(2){grid-column:1/5;grid-row:1;padding-right:46px;align-self:center}
+  .quote-lines tbody tr>td:nth-child(8){position:absolute;top:10px;right:8px;z-index:2}
+  .quote-lines tbody tr>td:nth-child(3){grid-column:1;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(4){grid-column:2;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(5){grid-column:3;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(6){grid-column:4;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(7){grid-column:1/5;grid-row:3;text-align:right;border-top:1px dashed var(--border-2);padding-top:9px}
+  .quote-lines td[data-l]{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .quote-lines td[data-l]::before{content:attr(data-l);font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .quote-lines .input{width:100%;height:40px;font-size:16px;padding:0 8px}
+  .quote-lines td[data-l] .pc{display:none}
+  .quote-lines .line-del{width:40px;height:40px;font-size:15px;background:var(--surface);border:1px solid var(--border-2)}
+}
+@media (max-width:400px){
+  .quote-lines tbody tr{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quote-lines tbody tr>td:nth-child(3){grid-column:1;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(4){grid-column:2;grid-row:2}
+  .quote-lines tbody tr>td:nth-child(5){grid-column:1;grid-row:3}
+  .quote-lines tbody tr>td:nth-child(6){grid-column:2;grid-row:3}
+  .quote-lines tbody tr>td:nth-child(7){grid-column:1/3;grid-row:4}
+}
+@media (max-width:760px){
+  .modal-foot{padding-top:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  .modal-head .x{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center}
+}
+@media (max-width:480px){
+  .qmf-tots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .qmf-acts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px}
+  .qmf-acts .btn{width:100%;min-height:44px;justify-content:center;padding:0 10px;flex:none}
+  .qmf-acts .btn:last-child:nth-child(odd){grid-column:1/-1}
+}
+
+/* Quotation & Order lists become stacked cards on phones (≤700px) —
+   no more horizontal scrolling to reach the date and row actions. */
+@media (max-width:700px){
+  .qlist,.olist{min-width:0}
+  .qlist thead,.olist thead{display:none}
+  .qlist tbody tr,.olist tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 14px;padding:13px 14px;margin:0 0 10px;background:var(--surface-2);border:1px solid var(--border-2);border-radius:14px}
+  .qlist tbody tr:last-child,.olist tbody tr:last-child{margin-bottom:0}
+  .qlist tbody td,.olist tbody td{border:none;padding:0;vertical-align:middle}
+  .qlist tbody tr>td:nth-child(1),.olist tbody tr>td:nth-child(1){grid-column:1;grid-row:1;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;align-self:center}
+  .qlist tbody tr>td:nth-child(4),.olist tbody tr>td:nth-child(4){grid-column:2;grid-row:1;justify-self:end;align-self:center}
+  .qlist tbody tr>td:nth-child(2),.olist tbody tr>td:nth-child(2){grid-column:1/3;grid-row:2;min-width:0}
+  .qlist tbody tr>td:nth-child(3),.olist tbody tr>td:nth-child(3){grid-column:1;grid-row:3;font-size:16.5px}
+  .qlist tbody tr>td:nth-child(5){grid-column:2;grid-row:3;justify-self:end;align-items:flex-end}
+  .qlist tbody tr>td:nth-child(6){grid-column:1/3;grid-row:4;border-top:1px dashed var(--border-2);padding-top:10px;margin-top:1px;display:flex;justify-content:flex-end}
+  .olist tbody tr>td:nth-child(5){grid-column:2;grid-row:3;justify-self:end;align-self:center}
+  .olist tbody tr>td:nth-child(6){grid-column:1;grid-row:4;justify-self:start;align-self:center;display:flex;align-items:center}
+  .olist tbody tr>td:nth-child(7){grid-column:2;grid-row:4;justify-self:end}
+  .qlist td[data-l],.olist td[data-l]{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .qlist td[data-l]::before,.olist td[data-l]::before{content:attr(data-l);font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+  .qlist tbody tr:has(td[colspan]),.olist tbody tr:has(td[colspan]){display:block;background:none;border:none;padding:0}
+  .qlist .cell-actions,.olist .cell-actions{opacity:1;display:flex;gap:8px;justify-content:flex-end;align-items:center}
+  .qlist .cell-actions .icon-btn-xs,.olist .cell-actions .icon-btn-xs{width:38px;height:38px;border-radius:11px;background:var(--surface);border:1px solid var(--border-2)}
+  .qlist .cell-actions .icon-btn-xs svg,.olist .cell-actions .icon-btn-xs svg{width:16px;height:16px}
+  .qlist .cell-actions .icon-btn-xs.danger,.olist .cell-actions .icon-btn-xs.danger{background:var(--c-red-bg);border-color:transparent;color:var(--c-red)}
+}
+
+/* compact status dropdown (list rows + detail header) */
+select.sel-st{height:30px;width:auto;min-width:112px;border-radius:9px;font-size:12px;font-weight:700;padding:0 30px 0 11px;display:inline-block;color:var(--text);border-color:var(--border-2);cursor:pointer}
+.d-time{display:block;font-size:10px;opacity:.72;font-variant-numeric:tabular-nums;line-height:1.35}
+select.input.sel-st{background-position:right 9px center}
+
+/* toolbar: search bar goes full width on phones, pills wrap neatly below it */
+@media (max-width:700px){
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar .search-box{max-width:100%;min-width:0;width:100%;flex:none}
+  .toolbar .chip-row{width:100%}
+}
 </style>
 </head>
 <body>
@@ -1310,15 +1402,22 @@ NS.num = function (n) { return nf.format(Number(n) || 0); };
 NS.esc = function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); };
 function pad2(n) { return (n < 10 ? '0' : '') + n; }
 NS.pad2 = pad2;
+NS.timeOf = function (s) {
+  if (!s || !/\d{1,2}:\d{2}/.test(String(s))) return '';
+  var d = new Date(String(s).replace(' ', 'T'));
+  if (isNaN(d.getTime())) return '';
+  return pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+};
 NS.fmtDT = function (s) {
   if (!s) return '—';
-  var d = new Date(s.replace(' ', 'T'));
-  if (isNaN(d)) return s;
+  var d = new Date(String(s).replace(' ', 'T'));
+  if (isNaN(d.getTime())) return s;
   var now = new Date();
-  if (d.toDateString() === now.toDateString()) return 'Today, ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
-  var y = d.toDateString() === new Date(now.getTime() - 864e5).toDateString();
-  if (y) return 'Yesterday, ' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
-  return pad2(d.getDate()) + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getFullYear();
+  var t = NS.timeOf(s);
+  if (d.toDateString() === now.toDateString()) return 'Today' + (t ? ', ' + t : '');
+  if (d.toDateString() === new Date(now.getTime() - 864e5).toDateString()) return 'Yesterday' + (t ? ', ' + t : '');
+  var base = pad2(d.getDate()) + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()] + ' ' + d.getFullYear();
+  return t ? base + ', ' + t : base;
 };
 NS.fmtD = function (s) { return NS.fmtDT(s).split(',')[0]; };
 NS.ymd = function (d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); };
@@ -1356,10 +1455,13 @@ NS.toast = function (title, body, tone) {
 };
 
 /* ---------- modal ---------- */
-NS.openModal = function (html, size) {
+NS.openModal = function (html, size, noFocus) {
   var root = document.getElementById('modalRoot');
   root.innerHTML = '<div class="modal-layer" data-act="modal-close-layer"><div class="modal ' + (size || '') + '">' + html + '</div></div>';
   document.body.style.overflow = 'hidden';
+  if (noFocus) return;
+  var coarse = window.matchMedia && window.matchMedia('(any-pointer:coarse)').matches;
+  if (coarse) return;
   var inp = root.querySelector('input,select,textarea');
   if (inp) setTimeout(function () { inp.focus(); }, 60);
 };
@@ -1993,6 +2095,7 @@ NS.boot = function () {
   document.head.appendChild(l3);
   /* listeners */
   document.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('select[data-chg]')) return;
     var t = ev.target.closest ? ev.target.closest('[data-act]') : null;
     if (t && NS.ACT[t.getAttribute('data-act')]) { NS.ACT[t.getAttribute('data-act')](t, ev); return; }
     if (!ev.target.closest('.pop-wrap')) NS.closePops();
@@ -2187,7 +2290,7 @@ function quoteRows(n) {
   return s.quotations.slice().sort(function (a, b) { return b.date < a.date ? -1 : 1; }).slice(0, n).map(function (q) {
     var c = NS.findCust(s, q.customerId) || {};
     var meta = NS.QUOTE_ST[q.status] || NS.QUOTE_ST.draft;
-    return '<tr class="clickable" data-act="qt-view" data-id="' + q.id + '"><td class="num bold" style="color:var(--primary-2)">' + q.id + '</td><td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', (c.avatarHue || 140)) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.name || 'Walk-in') + '</b><small>' + NS.esc((c.company || '')) + '</small></span></div></td><td class="num bold">' + NS.money(NS.liveTot(q).total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small">' + NS.fmtD(q.date) + '</td></tr>';
+    return '<tr class="clickable" data-act="qt-view" data-id="' + q.id + '"><td class="num bold" style="color:var(--primary-2)">' + q.id + '</td><td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', (c.avatarHue || 140)) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.name || 'Walk-in') + '</b><small>' + NS.esc((c.company || '')) + '</small></span></div></td><td class="num bold">' + NS.money(NS.liveTot(q).total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small"><span>' + NS.fmtD(q.date) + '</span>' + (NS.timeOf(q.date) ? '<span class="d-time">' + NS.timeOf(q.date) + '</span>' : '') + '</td></tr>';
   }).join('');
 }
 function orderRows(n) {
@@ -2195,7 +2298,7 @@ function orderRows(n) {
   return s.orders.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; }).slice(0, n).map(function (o) {
     var c = NS.findCust(s, o.customerId) || {};
     var meta = NS.ORDER_ST[o.status] || NS.ORDER_ST.pending;
-    return '<tr class="clickable" data-act="ord-view" data-id="' + o.id + '"><td class="num bold" style="color:var(--primary-2)">' + o.id + '</td><td><b style="font-size:12.8px">' + NS.esc(c.company || c.name) + '</b></td><td class="num bold">' + NS.money(o.total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small">' + NS.fmtD(o.date) + '</td></tr>';
+    return '<tr class="clickable" data-act="ord-view" data-id="' + o.id + '"><td class="num bold" style="color:var(--primary-2)">' + o.id + '</td><td><b style="font-size:12.8px">' + NS.esc(c.company || c.name) + '</b></td><td class="num bold">' + NS.money(o.total) + '</td><td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small"><span>' + NS.fmtD(o.date) + '</span>' + (NS.timeOf(o.date) ? '<span class="d-time">' + NS.timeOf(o.date) + '</span>' : '') + '</td></tr>';
   }).join('');
 }
 function lowStockHtml(n) {
@@ -2313,15 +2416,21 @@ NS.quoteDocHTML = function (q) {
     '<div style="margin-top:24px;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:8px">' + NS.esc(co.address) + ' · ' + NS.esc(co.phone) + ' · ' + NS.esc(co.email) + ' · ' + NS.esc(co.website) + '</div></div>';
 };
 
+function qStCell(q) {
+  var meta = NS.QUOTE_ST[q.status] || NS.QUOTE_ST.draft;
+  if (q.status === 'converted' || !NS.can('quotations', 'e')) return NS.badge(meta.t, meta.l, true);
+  var keys = ['draft', 'sent', 'viewed', 'expired'];
+  var opts = keys.map(function (k) { return '<option value="' + k + '"' + (q.status === k ? ' selected' : '') + '>' + NS.QUOTE_ST[k].l + '</option>'; }).join('');
+  return '<select class="input sel-st" data-chg="qst" data-id="' + q.id + '">' + opts + '</select>';
+}
 function qRows(list) {
   return list.map(function (q) {
     var c = quoteCust(q) || {};
-    var meta = NS.QUOTE_ST[q.status] || NS.QUOTE_ST.draft;
     var canConv = q.status === 'sent' || q.status === 'viewed';
     return '<tr class="clickable" data-act="qt-view" data-id="' + q.id + '"><td class="num bold" style="color:var(--primary-2)">' + q.id + '</td>' +
       '<td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', c.avatarHue || 140) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.name || 'Walk-in') + '</b><small>' + NS.esc(c.company || '') + '</small></span></div></td>' +
-      '<td class="num bold">' + NS.money(liveTot(q).total) + '</td>' +
-      '<td>' + NS.badge(meta.t, meta.l, true) + '</td><td class="muted small">' + NS.fmtD(q.date) + '</td>' +
+      '<td class="num bold" data-l="Amount">' + NS.money(liveTot(q).total) + '</td>' +
+      '<td>' + qStCell(q) + '</td><td class="muted small" data-l="Date"><span>' + NS.fmtD(q.date) + '</span>' + (NS.timeOf(q.date) ? '<span class="d-time">' + NS.timeOf(q.date) + '</span>' : '') + '</td>' +
       '<td><div class="cell-actions">' +
       (NS.can('quotations', 'e') && (q.status === 'draft') ? '<button class="icon-btn-xs" data-act="qt-edit" data-id="' + q.id + '" data-tip="Edit">' + NS.ic('edit') + '</button>' : '') +
       (canConv ? '<button class="icon-btn-xs" data-act="qt-convert" data-id="' + q.id + '" data-tip="Convert to order">' + NS.ic('arrowR') + '</button>' : '') +
@@ -2356,7 +2465,7 @@ NS.pages.quotations = function (main) {
     '<div class="chip-row grow">' + chips.map(function (c) {
       return '<button class="chip' + (f === c.k ? ' green-active active' : '') + '" data-act="qt-filter" data-f="' + c.k + '">' + c.l + ' <span class="tiny muted">' + (c.k === 'all' ? s.quotations.length : (counts[c.k] || 0)) + '</span></button>';
     }).join('') + '</div></div>';
-  tool += '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Quotation #</th><th>Customer</th><th style="text-align:right">Amount</th><th>Status</th><th>Date</th><th style="text-align:right">Actions</th></tr></thead><tbody>' + (slice.length ? qRows(slice) : '<tr><td colspan="6">' + NS.empty('\ud83d\udcc4', q || f !== 'all' ? 'No quotations match' : 'No quotations yet', q || f !== 'all' ? 'Try changing the search or filter.' : 'Create your first quotation to get started.', '') + '</td></tr>') + '</tbody></table></div>';
+  tool += '<div class="tbl-wrap"><table class="tbl qlist"><thead><tr><th>Quotation #</th><th>Customer</th><th style="text-align:right">Amount</th><th>Status</th><th>Date</th><th style="text-align:right">Actions</th></tr></thead><tbody>' + (slice.length ? qRows(slice) : '<tr><td colspan="6">' + NS.empty('\ud83d\udcc4', q || f !== 'all' ? 'No quotations match' : 'No quotations yet', q || f !== 'all' ? 'Try changing the search or filter.' : 'Create your first quotation to get started.', '') + '</td></tr>') + '</tbody></table></div>';
   tool += '<div class="tbl-foot"><span class="tiny muted">Showing ' + ((pg - 1) * per + 1) + '–' + Math.min(pg * per, list.length) + ' of ' + list.length + ' quotations</span>' + NS.pagerHTML('qtPg', pg, pages, 'qPg') + '</div></div>';
   main.innerHTML = head + tool;
   var inp = main.querySelector('#qSearchInp');
@@ -2395,6 +2504,8 @@ function renderQForm() {
   var s = st();
   var d = NS.ui.qDraft;
   if (!d) return;
+  var preBody = document.querySelector('#modalRoot .modal-body');
+  var keepTop = preBody ? preBody.scrollTop : 0;
   var cust = NS.findCust(s, d.customerId) || {};
   var t = NS.totOf(d.items || []);
   var opts = '<option value="">Select customer…</option>' + s.customers.map(function (c) { return '<option value="' + c.id + '"' + (c.id === d.customerId ? ' selected' : '') + '>' + NS.esc(c.company || c.name) + ' — ' + NS.esc(c.name) + '</option>'; }).join('');
@@ -2402,11 +2513,11 @@ function renderQForm() {
     var lt = NS.totalsLine(it);
     var pOpts = s.products.map(function (p) { return '<option value="' + p.id + '"' + (p.id === it.productId ? ' selected' : '') + ' data-p="' + p.sellingPrice + '">' + NS.esc(p.name) + ' — ₹' + p.sellingPrice + '</option>'; }).join('');
     return '<tr><td style="border:none" class="num muted">' + (i + 1) + '</td>' +
-      '<td style="border:none;min-width:190px"><select class="input" data-qline="prod" data-i="' + i + '">' + pOpts + '</select></td>' +
-      '<td style="border:none"><input class="input num" type="number" min="1" value="' + it.qty + '" data-qline="qty" data-i="' + i + '"></td>' +
-      '<td style="border:none"><input class="input num" type="number" min="0" step="0.01" value="' + it.price + '" data-qline="price" data-i="' + i + '"></td>' +
-      '<td style="border:none"><input class="input num" type="number" min="0" max="100" value="' + it.discount + '" data-qline="disc" data-i="' + i + '"> <span class="tiny muted">%</span></td>' +
-      '<td style="border:none"><input class="input num" type="number" min="0" max="100" value="' + it.tax + '" data-qline="tax" data-i="' + i + '"> <span class="tiny muted">%</span></td>' +
+      '<td style="border:none;min-width:190px" data-l="Product"><select class="input" data-qline="prod" data-i="' + i + '">' + pOpts + '</select></td>' +
+      '<td style="border:none" data-l="Qty"><input class="input num" type="number" min="1" value="' + it.qty + '" data-qline="qty" data-i="' + i + '"></td>' +
+      '<td style="border:none" data-l="Price"><input class="input num" type="number" min="0" step="0.01" value="' + it.price + '" data-qline="price" data-i="' + i + '"></td>' +
+      '<td style="border:none" data-l="Disc"><input class="input num" type="number" min="0" max="100" value="' + it.discount + '" data-qline="disc" data-i="' + i + '"><span class="tiny muted pc">%</span></td>' +
+      '<td style="border:none" data-l="Tax"><input class="input num" type="number" min="0" max="100" value="' + it.tax + '" data-qline="tax" data-i="' + i + '"><span class="tiny muted pc">%</span></td>' +
       '<td style="border:none;text-align:right" class="num bold">' + NS.money(lt.total) + '</td>' +
       '<td style="border:none"><button type="button" class="line-del" data-act="qline-del" data-i="' + i + '" ' + (d.items.length === 1 ? 'disabled' : '') + ' title="Remove">\u2715</button></td></tr>';
   }).join('');
@@ -2423,12 +2534,22 @@ function renderQForm() {
   body += '<button type="button" class="btn btn-soft btn-sm mt8" data-act="qline-add">' + NS.ic('plus', '') + ' Add another product</button>';
   body += '<div class="form-grid mt16"><div class="field"><label>Terms &amp; Conditions</label><textarea class="input" id="qTerms">' + NS.esc(d.terms || '') + '</textarea></div><div class="field"><label>Internal notes (not printed)</label><textarea class="input" id="qNotes">' + NS.esc(d.notes || '') + '</textarea></div></div>';
   body += '</form>';
-  var tot = '<div style="width:240px;margin-left:auto;margin-top:6px"><div class="amount-line"><span class="muted">Subtotal</span><b class="num">' + NS.money(t.gross) + '</b></div><div class="amount-line"><span class="muted">Discount</span><b class="num" style="color:var(--c-green)">-' + NS.money(t.discount) + '</b></div><div class="amount-line"><span class="muted">Tax (GST)</span><b class="num">' + NS.money(t.tax) + '</b></div><div class="amount-line grand"><span>Grand Total</span><b class="num" style="color:var(--primary-2)">' + NS.money(t.total) + '</b></div></div>';
-  var foot = tot + '<div style="display:flex;gap:8px;justify-content:flex-end;width:100%;margin-top:10px"><button class="btn btn-ghost" data-act="qt-cancel-form">Cancel</button>' +
+  var foot = '<div class="qmf"><div class="qmf-tots">' +
+    '<div class="qt-item"><span>Subtotal</span><b class="num">' + NS.money(t.gross) + '</b></div>' +
+    '<div class="qt-item"><span>Discount</span><b class="num" style="color:var(--c-green)">-' + NS.money(t.discount) + '</b></div>' +
+    '<div class="qt-item"><span>GST</span><b class="num">' + NS.money(t.tax) + '</b></div>' +
+    '<div class="qt-item qt-grand"><span>Grand total</span><b class="num">' + NS.money(t.total) + '</b></div>' +
+    '</div><div class="qmf-acts">' +
+    '<button class="btn btn-ghost" data-act="qt-cancel-form">Cancel</button>' +
     (NS.can('quotations', 'c') ? '<button type="button" class="btn btn-ghost" data-act="qt-save-draft">Save Draft</button>' : '') +
     '<button type="button" class="btn btn-soft" data-act="qt-preview">Preview</button>' +
-    (NS.can('quotations', 'c') ? '<button type="button" class="btn btn-primary" data-act="qt-send-now">Send</button>' : '') + '</div>';
-  NS.openModal(NS.modalShell(d._qid ? 'Edit ' + d._qid : 'New Quotation', '<span class="icon-tile green" style="width:30px;height:30px">' + NS.ic('quotes') + '</span>', body + foot, '', 'lg'), 'lg');
+    (NS.can('quotations', 'c') ? '<button type="button" class="btn btn-primary" data-act="qt-send-now">Send</button>' : '') +
+    '</div></div>';
+  NS.openModal(NS.modalShell(d._qid ? 'Edit ' + d._qid : 'New Quotation', '<span class="icon-tile green" style="width:30px;height:30px">' + NS.ic('quotes') + '</span>', body, foot, 'lg'), 'lg', true);
+  requestAnimationFrame(function () {
+    var nb = document.querySelector('#modalRoot .modal-body');
+    if (nb) { void nb.scrollHeight; nb.scrollTop = keepTop; }
+  });
   var dt = document.getElementById('qDate'), vd = document.getElementById('qValid');
   NS.ui.qDraft.date = dt.value ? dt.value + ' 10:00:00' : NS.ymd(new Date()) + ' 10:00:00';
   NS.ui.qDraft.validUntil = vd.value ? vd.value + ' 18:00:00' : '';
@@ -2632,7 +2753,7 @@ function openQView(id) {
   var rows = q.items.map(function (it, i) {
     return '<tr><td>' + (i + 1) + '</td><td><b>' + NS.esc(it.name) + '</b><br><span class="tiny muted">' + NS.esc(it.sku || '') + '</span></td><td class="num">' + NS.money(it.price) + '</td><td>' + it.qty + '</td><td>' + (it.discount ? it.discount + '%' : '—') + '</td><td>' + it.tax + '%</td><td class="num bold">' + NS.money(NS.totalsLine(it).total) + '</td></tr>';
   }).join('');
-  var body = '<div class="flex between mb16 wrap"><div class="flex"><div><b style="font-size:17px">' + q.id + '</b> ' + NS.badge(meta.t, meta.l, true) + (q.status === 'converted' && q.convertedOrderId ? ' ' + NS.badge('green', '\u2192 ' + q.convertedOrderId) : '') + '</div></div><div class="flex muted small"><span>' + NS.fmtDT(q.date) + '</span><span>·</span><span>Valid till ' + NS.fmtD(q.validUntil) + '</span></div></div>';
+  var body = '<div class="flex between mb16 wrap"><div class="flex"><div><b style="font-size:17px">' + q.id + '</b> ' + qStCell(q) + (q.status === 'converted' && q.convertedOrderId ? ' ' + NS.badge('green', '\u2192 ' + q.convertedOrderId) : '') + '</div></div><div class="flex muted small"><span>' + NS.fmtDT(q.date) + '</span><span>·</span><span>Valid till ' + NS.fmtD(q.validUntil) + '</span></div></div>';
   body += '<div class="doc-grid mb16"><div class="info-cell"><span class="ic-t purple">' + NS.ic('customers', '') + '</span><div><b>' + NS.esc(c.name || '—') + '</b><span>' + NS.esc(c.company || '') + '</span><span>' + NS.esc(c.phone || '') + ' · ' + NS.esc(c.email || '') + '</span></div></div>';
   body += '<div class="info-cell"><span class="ic-t green">' + NS.ic('wallet', '') + '</span><div><b style="font-size:17px">' + NS.money(t.total) + '</b><span>Subtotal ' + NS.money(t.gross) + ' · Discount ' + NS.money(t.discount) + ' · GST ' + NS.money(t.tax) + '</span></div></div></div>';
   body += '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Product</th><th class="right">Price</th><th>Qty</th><th>Disc</th><th>Tax</th><th class="right">Line Total</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
@@ -2667,6 +2788,17 @@ NS.ACT['qt-del'] = function (el) {
     NS.save(); NS.toast('Quotation deleted', id + ' removed.', 'success'); NS.pages.quotations(document.getElementById('main'));
   } });
 };
+NS.ACT['chg:qst'] = function (el) { setQuoteStatus(el.getAttribute('data-id'), el.value); };
+function setQuoteStatus(id, v) {
+  var s = st();
+  var q = null;
+  s.quotations.forEach(function (x) { if (x.id === id) q = x; });
+  if (!q || q.status === 'converted' || !NS.QUOTE_ST[v]) return;
+  q.status = v; q.total = liveTot(q).total;
+  NS.save(); NS.closeModal();
+  NS.toast('Quotation ' + q.id + ' \u2192 ' + NS.QUOTE_ST[v].l, v === 'expired' ? 'Marked expired. Re-send to the customer to revive it.' : v === 'draft' ? 'Back to draft \u2014 edit and send when ready.' : 'Status updated.', v === 'expired' ? 'warn' : 'success');
+  NS.pages.quotations(document.getElementById('main'));
+}
 })(window.BO);
 </script>
 <script>
@@ -3039,17 +3171,22 @@ function nextOrderNo() {
   return 'ORD-' + (max + 1);
 }
 function oCust(o) { return NS.findCust(st(), o.customerId); }
+function oStCell(o) {
+  if (!NS.can('orders', 'e')) { var m = NS.ORDER_ST[o.status]; return NS.badge(m.t, m.l, true); }
+  var keys = Object.keys(NS.ORDER_ST);
+  var opts = keys.map(function (k) { return '<option value="' + k + '"' + (o.status === k ? ' selected' : '') + '>' + NS.ORDER_ST[k].l + '</option>'; }).join('');
+  return '<select class="input sel-st" data-chg="ost" data-id="' + o.id + '">' + opts + '</select>';
+}
 function oRows(list) {
   var s = st();
   return list.map(function (o) {
     var c = oCust(o) || {};
-    var m = NS.ORDER_ST[o.status];
     var pm = NS.PAY_ST[o.payment] || NS.PAY_ST.unpaid;
     return '<tr class="clickable" data-act="ord-view" data-id="' + o.id + '"><td class="num bold" style="color:var(--primary-2)">' + o.id + '</td>' +
       '<td><div class="person-cell"><span class="avatar-xs" style="' + NS.avatarHue(c.name || '?', c.avatarHue || 140) + '">' + NS.initials(c.name || '?') + '</span><span><b>' + NS.esc(c.company || c.name || '—') + '</b><small>' + NS.esc(c.name || '') + '</small></span></div></td>' +
-      '<td class="num bold">' + NS.money(o.total) + '</td>' +
-      '<td>' + NS.badge(m.t, m.l, true) + '</td><td>' + NS.badge(pm.t, pm.l) + '</td>' +
-      '<td class="muted small">' + NS.fmtD(o.date) + '</td>' +
+      '<td class="num bold" data-l="Amount">' + NS.money(o.total) + '</td>' +
+      '<td>' + oStCell(o) + '</td><td>' + NS.badge(pm.t, pm.l) + '</td>' +
+      '<td class="muted small" data-l="Date"><span>' + NS.fmtD(o.date) + '</span>' + (NS.timeOf(o.date) ? '<span class="d-time">' + NS.timeOf(o.date) + '</span>' : '') + '</td>' +
       '<td><div class="cell-actions"><button class="icon-btn-xs" data-act="ord-view" data-id="' + o.id + '" data-tip="View">' + NS.ic('eye') + '</button>' + (NS.can('orders', 'e') ? '<button class="icon-btn-xs" data-act="ord-advance" data-id="' + o.id + '" data-tip="Advance status">' + NS.ic('arrowR') + '</button>' : '') + '</div></td></tr>';
   }).join('');
 }
@@ -3074,7 +3211,7 @@ NS.pages.orders = function (main) {
   var html = '<div class="page-head"><div><h1><span class="icon-tile red" style="width:36px;height:36px">' + NS.ic('orders') + '</span> Orders</h1><p>From quotation to delivery — every order, payment and status in one place.</p></div><div class="actions">' + (NS.can('orders', 'c') ? '<button class="btn btn-primary" data-act="ord-new">' + NS.ic('plus', '') + ' Create Order</button>' : '') + '</div></div>';
   html += '<div class="grid-3 mb16"><div class="card card-pad stat-mini"><span class="icon-tile cyan">' + NS.ic('clock', '') + '</span><div><div class="v">' + open + '</div><div class="l">Active orders</div></div></div><div class="card card-pad stat-mini"><span class="icon-tile orange">' + NS.ic('wallet', '') + '</span><div><div class="v">' + NS.money(unpaid) + '</div><div class="l">Payments outstanding</div></div></div><div class="card card-pad stat-mini"><span class="icon-tile green">' + NS.ic('check', '') + '</span><div><div class="v">' + deliv + '</div><div class="l">Delivered orders</div></div></div></div>';
   html += '<div class="card"><div class="toolbar"><div class="search-box">' + NS.ic('mag') + '<input id="oSearchInp" placeholder="Search order # or customer…" value="' + NS.esc(NS.ui.oSearch || '') + '"></div><div class="chip-row grow">' + chips.map(function (c) { return '<button class="chip' + (f === c.k ? ' green-active active' : '') + '" data-act="o-filter" data-f="' + c.k + '">' + c.l + ' <span class="tiny muted">' + (c.k === 'all' ? s.orders.length : (counts[c.k] || 0)) + '</span></button>'; }).join('') + '</div></div>';
-  html += '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Order #</th><th>Customer</th><th class="right">Amount</th><th>Status</th><th>Payment</th><th>Date</th><th class="right">Actions</th></tr></thead><tbody>';
+  html += '<div class="tbl-wrap"><table class="tbl olist"><thead><tr><th>Order #</th><th>Customer</th><th class="right">Amount</th><th>Status</th><th>Payment</th><th>Date</th><th class="right">Actions</th></tr></thead><tbody>';
   html += slice.length ? oRows(slice) : '<tr><td colspan="7">' + NS.empty('\ud83d\uded2', 'No orders match', 'Try another filter or create a new order.', '') + '</td></tr>';
   html += '</tbody></table></div><div class="tbl-foot"><span class="tiny muted">' + list.length + ' orders</span>' + NS.pagerHTML('oPg', pg, pages, 'oPg') + '</div></div>';
   main.innerHTML = html;
@@ -3163,6 +3300,21 @@ NS.ACT['ord-create-save'] = function () {
   NS.pages.orders(document.getElementById('main'));
 };
 NS.ACT['ord-view'] = function (el) { ordDetail(el.getAttribute('data-id')); };
+NS.ACT['chg:ost'] = function (el) { setOrderStatus(el.getAttribute('data-id'), el.value); };
+function setOrderStatus(id, v) {
+  var s = st();
+  var o = null;
+  s.orders.forEach(function (x) { if (x.id === id) o = x; });
+  if (!o || !NS.ORDER_ST[v] || o.status === v) return;
+  o.status = v;
+  var now = NS.ymd(new Date()) + ' ' + new Date().toTimeString().slice(0, 5);
+  o.timeline = o.timeline || [];
+  o.timeline.push({ label: NS.ORDER_ST[v].l, date: now, by: NS.currentUser().name });
+  if (v === 'delivered' && o.payment === 'unpaid') { o.payment = 'paid'; o.paidAmount = o.total; o.timeline.push({ label: 'Payment received (full)', date: now, by: NS.currentUser().name }); }
+  NS.save(); NS.closeModal();
+  NS.toast('Order ' + o.id + ' \u2192 ' + NS.ORDER_ST[v].l, v === 'delivered' ? 'Delivered. Payment auto-marked if outstanding.' : v === 'cancelled' ? 'This order was cancelled.' : 'Status updated.', v === 'cancelled' ? 'warn' : 'success');
+  NS.pages.orders(document.getElementById('main'));
+}
 function ordDetail(id) {
   var s = st();
   var o = null;
@@ -3181,7 +3333,7 @@ function ordDetail(id) {
     var when = tle.length ? tle[0].date : null;
     return '<div class="tl-item' + (done ? ' done' : '') + (cur ? ' cur' : '') + '"><b>' + FLOW_LABEL[s2] + '</b>' + (when ? '<small>' + NS.fmtDT(when) + '</small>' : '') + '</div>';
   }).join('') + '</div>';
-  var body = '<div class="flex between wrap mb16"><div><b style="font-size:18px">' + o.id + '</b> ' + NS.badge(m.t, m.l, true) + ' ' + NS.badge(pm.t, pm.l) + (o.quotationId ? ' ' + NS.badge('purple', 'From ' + o.quotationId) : '') + '</div><span class="muted small">' + NS.fmtDT(o.date) + ' · via ' + NS.esc(o.channel || '—') + '</span></div>';
+  var body = '<div class="flex between wrap mb16"><div><b style="font-size:18px">' + o.id + '</b> ' + oStCell(o) + ' ' + NS.badge(pm.t, pm.l) + (o.quotationId ? ' ' + NS.badge('purple', 'From ' + o.quotationId) : '') + '</div><span class="muted small">' + NS.fmtDT(o.date) + ' · via ' + NS.esc(o.channel || '—') + '</span></div>';
   body += '<div class="doc-grid mb16"><div class="info-cell"><span class="ic-t purple">' + NS.ic('customers', '') + '</span><div><b>' + NS.esc(c.name || '—') + '</b><span>' + NS.esc(c.company || '') + '</span><span>' + NS.esc(c.phone || '') + ' · ' + NS.esc(c.email || '') + '</span></div></div>';
   body += '<div class="info-cell"><span class="ic-t green">' + NS.ic('wallet', '') + '</span><div><b style="font-size:16px">' + NS.money(o.total) + '</b><span>Paid ' + NS.money(o.paidAmount || 0) + ' · Balance ' + NS.money((o.total - (o.paidAmount || 0))) + '</span></div></div></div>';
   body += '<div class="grid-2 mb16"><div class="card" style="border-radius:12px;padding:14px 16px"><b class="small">Order items</b><div class="tbl-wrap mt8" style="max-height:220px;overflow-y:auto"><table class="tbl" style="min-width:420px"><thead><tr><th>#</th><th>Product</th><th class="right">Price</th><th>Qty</th><th class="right">Total</th></tr></thead><tbody>' + items + '</tbody></table></div></div><div class="card" style="border-radius:12px;padding:14px 16px"><b class="small">Order timeline</b><div class="mt8">' + timeline + '</div></div></div>';
@@ -4243,10 +4395,11 @@ NS.ACT['icon-set'] = function (el) {
 };
 function finishOnboarding(mode, silent) {
   NS.applyIconStyle(mode || 'colorful');
-  st().settings.onboarded = true;
-  NS.save();
+  var rem = document.getElementById('obRemember');
+  var remember = !rem || rem.checked;
+  if (remember) { st().settings.onboarded = true; NS.save(); }
   NS.closeModal();
-  if (!silent) NS.toast('Welcome to BUSINESSOS', 'Your business, your web app, anywhere. Open Settings anytime to restyle.', 'success');
+  if (!silent && remember) NS.toast('Welcome to BUSINESSOS', 'Your business, your web app, anywhere. Open Settings anytime to restyle.', 'success');
   if (location.hash !== '#/dashboard') location.hash = '#/dashboard';
 }
 NS.ACT['ob-skip'] = function () { finishOnboarding('colorful'); };
@@ -4268,6 +4421,7 @@ NS.showOnboarding = function () {
   var body = '<div style="font-size:14px">Hello! Before you explore <b>BUSINESSOS</b>, pick the look that feels best for your team.</div>';
   body += '<div class="ob-grid mt16">' + colorfulCard + minimalCard + '</div>';
   body += '<p class="tiny muted mt12">You can switch between both looks anytime in <b>Settings \u2192 Appearance</b>. Your choice here only changes icon styling \u2014 business data is identical.</p>';
+  body += '<label class="check ob-remember" style="margin-top:14px;padding:10px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px"><input type="checkbox" id="obRemember" checked><span style="font-size:12.5px">Remember my choice \u2014 don\u2019t ask again on this device</span></label>';
   var foot = '<button class="btn btn-ghost" data-act="ob-skip">Skip</button><button class="btn btn-primary" data-act="ob-go">Continue to Dashboard \u2192</button>';
   NS.openModal(NS.modalShell('Welcome to BUSINESSOS', '<span class="brand-mark" style="width:30px;height:30px;font-size:9px">OM</span>', body, foot, 'ob-layer'), 'ob-layer');
   document.querySelectorAll('#modalRoot .x').forEach(function (x) { x.setAttribute('data-act', 'ob-skip'); });
