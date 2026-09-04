@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>QA responsive harness</title>
+<style>
+body{font-family:system-ui;background:#222;color:#eee;margin:0;padding:12px;display:grid;gap:14px}
+h1{font-size:14px;margin:0}
+.wrap{display:flex;gap:14px;flex-wrap:wrap}
+.frame{background:#111;border:1px solid #555;border-radius:8px;overflow:hidden}
+.frame .cap{font-size:11px;color:#9cf;padding:4px 8px}
+iframe{border:0;background:#fff;display:block}
+</style>
+</head>
+<body>
+<h1>BUSINESSOS responsive QA — 375px phone / 768px tablet / 1024px small laptop</h1>
+<div class="wrap">
+  <div class="frame"><div class="cap">375 &times; 720</div><iframe id="f375" src="index.html" style="width:375px;height:720px"></iframe></div>
+  <div class="frame"><div class="cap">768 &times; 900</div><iframe id="f768" src="index.html" style="width:768px;height:900px"></iframe></div>
+  <div class="frame"><div class="cap">1024 &times; 900</div><iframe id="f1024" src="index.html" style="width:1024px;height:900px"></iframe></div>
+</div>
+<script>
+function report(id){
+  var f=document.getElementById(id);
+  var w=f.contentWindow,d=w.document;
+  var res={id:id};
+  try{
+    var iw=d.getElementById('bottomNav');
+    if(iw){var r=iw.getBoundingClientRect();var cs=w.getComputedStyle(iw);
+      res.bottomNav={x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height),pos:cs.position,disp:cs.display};
+      res.bnItems=[].slice.call(iw.querySelectorAll('.bn-item')).map(function(b){var br=b.getBoundingClientRect();return {t:b.innerText.replace(/\s+/g,' ').trim(),w:Math.round(br.width),h:Math.round(br.height),disp:w.getComputedStyle(b).display}});
+    }
+    var sb=d.getElementById('sidebar');
+    if(sb){res.sidebar=w.getComputedStyle(sb).transform}
+    var mc=d.querySelector('.main-col');
+    if(mc){res.mainW=Math.round(mc.getBoundingClientRect().width)}
+    res.hOverflow=d.documentElement.scrollWidth>w.innerWidth;
+    res.scrollW=d.documentElement.scrollWidth+'/'+w.innerWidth;
+    res.menuBtn=w.getComputedStyle(d.querySelector('.menu-btn')).display;
+    var tb=d.getElementById('topbar');
+    if(tb){res.topbarW=Math.round(tb.getBoundingClientRect().width)}
+  }catch(e){res.err=String(e)}
+  return res;
+}
+window.__qa={report:report};
+</script>
+</body>
+</html>
